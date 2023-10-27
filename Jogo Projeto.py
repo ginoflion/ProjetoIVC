@@ -3,7 +3,7 @@ Snake Eater
 Made with PyGame
 """
 
-from Camera import image_capture
+from Camera import *
 import pygame, sys, time, random
 import cv2
 
@@ -89,11 +89,15 @@ def show_score(choice, color, font, size):
     game_window.blit(score_surface, score_rect)
     # pygame.display.flip()
 
+# Camera
+camera = Camera()
+camera.open_camera()
 
 # Main logic
 
 waiting_for_keypress = True
 while waiting_for_keypress:
+    camera.update_camera()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -103,7 +107,7 @@ while waiting_for_keypress:
 
 
 while True:
-
+    camera.update_camera()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
