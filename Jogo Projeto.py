@@ -3,6 +3,7 @@ Snake Eater
 Made with PyGame
 """
 
+from Camera import image_capture
 import pygame, sys, time, random
 import cv2
 
@@ -21,7 +22,7 @@ frame_size_y = 480
 
 # Checks for errors encountered
 check_errors = pygame.init()
-# pygame.init() example output -> (6, 0)
+
 # second number in tuple gives number of errors
 if check_errors[1] > 0:
     print(f'[!] Had {check_errors[1]} errors when initialising game, exiting...')
@@ -91,7 +92,15 @@ def show_score(choice, color, font, size):
 
 # Main logic
 
-cap = cv2.VideoCapture(0)
+waiting_for_keypress = True
+while waiting_for_keypress:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+            waiting_for_keypress = False
+
 
 while True:
 
@@ -158,17 +167,9 @@ while True:
     # Snake food
     pygame.draw.rect(game_window, white, pygame.Rect(food_pos[0], food_pos[1], 10, 10))
 
-    # Camera
-    ret, image = cap.read()
 
-    # Check if the frame is valid
-    if not ret or image is None or image.shape[0] <= 0 or image.shape[1] <= 0:
-        print("Error: Invalid frame from the camera.")
-        # Handle the error, for example, skip this iteration of the loop
-        continue
 
-    # Display the camera feed in a separate window
-    cv2.imshow("Camera Feed", image)
+
 
     # Game Over conditions
     # Getting out of bounds
@@ -192,7 +193,7 @@ while True:
     if keys[pygame.K_q]:
         break
 
-cap.release()
+
 cv2.destroyAllWindows()
 pygame.quit()
-sys.exit()
+sys.exit() 
