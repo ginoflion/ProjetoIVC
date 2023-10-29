@@ -6,16 +6,17 @@ class Camera:
 
     def __init__(self):
 
-        self.h_min = 116
-        self.h_max = 133
-        self.s_min = 79
-        self.s_max = 255
-        self.v_min = 54
-        self.v_max = 214
+        self.h_min = 28
+        self.h_max = 44
+        self.s_min = 89
+        self.s_max = 254
+        self.v_min = 29
+        self.v_max = 255
 
         self.direction = 0
-        self.isFiring = False
 
+        self.object_center_x = None
+        self.object_center_y = None
         self.cap = None
         self.image_hsv = None
 
@@ -62,22 +63,44 @@ class Camera:
                 cx = int(np.round(m['m10'] / m['m00']))  # Center x
                 cy = int(np.round(m['m01'] / m['m00']))  # Center y
                 perimeter = cv2.arcLength(curve=contour, closed=True)
-                if cx > (2 / 3) * mask.shape[1]:
+                if cx > (2 / 3) * mask.shape[1] and (1 / 3) * mask.shape[0] < cy < (2 / 3) * \
+                        mask.shape[0] :
                     cv2.rectangle(img=mask_filtered,
                                   pt1=(mask.shape[1] - 10, 0),
                                   pt2=(mask.shape[1] - 10, mask.shape[0]),
                                   color=(1, 1, 1), thickness=6)
                     cv2.imshow("Mask Filtered", mask_filtered * 255)
 
-                elif cx < (1 / 3) * mask.shape[1]:
+                elif cx < (1 / 3) * mask.shape[1] and (1 / 3) * mask.shape[0] < cy < (2 / 3) * \
+                        mask.shape[0] :
                     cv2.rectangle(img=mask_filtered,
                                   pt1=(10, 0),
                                   pt2=(10, mask.shape[0]),
                                   color=(1, 1, 1), thickness=6)
                     cv2.imshow("Mask Filtered", mask_filtered * 255)
-
+                elif cy > (2 / 3) * mask.shape[0] and (1 / 3) * mask.shape[0] < cx < (2 / 3) * \
+                        mask.shape[0]:  # Bottom side of the screen
+                    cv2.rectangle(img=mask_filtered,
+                                  pt1=(0, mask.shape[0] - 10),
+                                  pt2=(mask.shape[1], mask.shape[0] - 10),
+                                  color=(1, 1, 1), thickness=6)
+                    cv2.imshow("Mask Filtered", mask_filtered * 255)
+                elif cy < (1 / 3) * mask.shape[0] and (1 / 3) * mask.shape[0] < cx < (2 / 3) * \
+                        mask.shape[0]:  # Top side of the screen
+                    cv2.rectangle(img=mask_filtered,
+                                  pt1=(0, 10),
+                                  pt2=(mask.shape[1], 10),
+                                  color=(1, 1, 1), thickness=6)
+                    cv2.imshow("Mask Filtered", mask_filtered * 255)
                 else:
                     cv2.imshow("Mask Filtered", mask_filtered * 255)
+
+                self.object_center_x = cx
+                self.object_center_y = cy
+
+    def get_object_position(self):
+        # Use the object's center coordinates obtained from segmentation
+        return self.object_center_x, self.object_center_y
 
     def on_change_h_min(self, val):
         self.h_min = val

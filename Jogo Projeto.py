@@ -14,7 +14,7 @@ import cv2
 # Hard      ->  40
 # Harder    ->  60
 # Impossible->  120
-difficulty = 25
+difficulty = 10
 
 # Window size
 frame_size_x = 720
@@ -108,6 +108,17 @@ while waiting_for_keypress:
 
 while True:
     camera.update_camera()
+    object_x, object_y = camera.get_object_position()  # Replace this with the actual method to get object position
+
+    # Moving the snake based on the object tracking position
+    if object_x > (2 / 3) * frame_size_x and (1 / 3) * frame_size_y < object_y < (2 / 3) * frame_size_y:
+        change_to = 'RIGHT'
+    elif object_x < (1 / 3) * frame_size_x and (1 / 3) * frame_size_y < object_y < (2 / 3) * frame_size_y:
+        change_to = 'LEFT'
+    elif object_y > (2 / 3) * frame_size_y and (1 / 3) * frame_size_x < object_x < (2 / 3) * frame_size_x:
+        change_to = 'DOWN'
+    elif object_y < (1 / 3) * frame_size_y and (1 / 3) * frame_size_x < object_x < (2 / 3) * frame_size_x:
+        change_to = 'UP'
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
