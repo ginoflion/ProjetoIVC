@@ -13,11 +13,8 @@ class Camera:
         self.v_min = 29
         self.v_max = 255
 
-        self.direction = 0
-
         self.object_center_x = None
         self.object_center_y = None
-        self.cap = None
         self.image_hsv = None
 
     def update_segmentation(self):
@@ -60,9 +57,8 @@ class Camera:
                 cv2.drawContours(image=mask_filtered, contours=contours,
                                  contourIdx=i, color=(1, 1, 1), thickness=-1)
                 m = cv2.moments(contour)
-                cx = int(np.round(m['m10'] / m['m00']))  # Center x
-                cy = int(np.round(m['m01'] / m['m00']))  # Center y
-                perimeter = cv2.arcLength(curve=contour, closed=True)
+                cx = int(np.round(m['m10'] / m['m00']))
+                cy = int(np.round(m['m01'] / m['m00']))
                 if cx > (2 / 3) * mask.shape[1] and (1 / 3) * mask.shape[0] < cy < (2 / 3) * \
                         mask.shape[0] :
                     cv2.rectangle(img=mask_filtered,
@@ -78,15 +74,13 @@ class Camera:
                                   pt2=(10, mask.shape[0]),
                                   color=(1, 1, 1), thickness=6)
                     cv2.imshow("Mask Filtered", mask_filtered * 255)
-                elif cy > (2 / 3) * mask.shape[0] and (1 / 3) * mask.shape[0] < cx < (2 / 3) * \
-                        mask.shape[0]:  # Bottom side of the screen
+                elif cy > (2 / 3) * mask.shape[0] and (1 / 3) * mask.shape[1] < cx < (2 / 3) * mask.shape[1]:
                     cv2.rectangle(img=mask_filtered,
                                   pt1=(0, mask.shape[0] - 10),
                                   pt2=(mask.shape[1], mask.shape[0] - 10),
                                   color=(1, 1, 1), thickness=6)
                     cv2.imshow("Mask Filtered", mask_filtered * 255)
-                elif cy < (1 / 3) * mask.shape[0] and (1 / 3) * mask.shape[0] < cx < (2 / 3) * \
-                        mask.shape[0]:  # Top side of the screen
+                elif cy < (1 / 3) * mask.shape[0] and (1 / 3) * mask.shape[1] < cx < (2 / 3) * mask.shape[1]:
                     cv2.rectangle(img=mask_filtered,
                                   pt1=(0, 10),
                                   pt2=(mask.shape[1], 10),
