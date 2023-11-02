@@ -6,7 +6,7 @@ class Camera:
 
     def __init__(self):
 
-        self.h_min = 28
+        self.h_min = 23
         self.h_max = 44
         self.s_min = 89
         self.s_max = 254
@@ -59,16 +59,14 @@ class Camera:
                 m = cv2.moments(contour)
                 cx = int(np.round(m['m10'] / m['m00']))
                 cy = int(np.round(m['m01'] / m['m00']))
-                if cx > (2 / 3) * mask.shape[1] and (1 / 3) * mask.shape[0] < cy < (2 / 3) * \
-                        mask.shape[0] :
+                if cx > (2 / 3) * mask.shape[1] and (1 / 3) * mask.shape[0] < cy < (2 / 3) * mask.shape[0]:
                     cv2.rectangle(img=mask_filtered,
                                   pt1=(mask.shape[1] - 10, 0),
                                   pt2=(mask.shape[1] - 10, mask.shape[0]),
                                   color=(1, 1, 1), thickness=6)
                     cv2.imshow("Mask Filtered", mask_filtered * 255)
 
-                elif cx < (1 / 3) * mask.shape[1] and (1 / 3) * mask.shape[0] < cy < (2 / 3) * \
-                        mask.shape[0] :
+                elif cx < (1 / 3) * mask.shape[1] and (1 / 3) * mask.shape[0] < cy < (2 / 3) * mask.shape[0]:
                     cv2.rectangle(img=mask_filtered,
                                   pt1=(10, 0),
                                   pt2=(10, mask.shape[0]),

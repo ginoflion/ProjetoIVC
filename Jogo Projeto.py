@@ -87,14 +87,13 @@ def show_score(choice, color, font, size):
     else:
         score_rect.midtop = (frame_size_x/2, frame_size_y/1.25)
     game_window.blit(score_surface, score_rect)
-    # pygame.display.flip()
+    pygame.display.flip()
 
 # Camera
 camera = Camera()
 camera.open_camera()
 
 # Main logic
-
 waiting_for_keypress = True
 while waiting_for_keypress:
     camera.update_camera()
@@ -108,7 +107,7 @@ while waiting_for_keypress:
 
 while True:
     camera.update_camera()
-    object_x, object_y = camera.get_object_position()  # Replace this with the actual method to get object position
+    object_x, object_y = camera.get_object_position()
 
     # Moving the snake based on the object tracking position
     if object_x > (2 / 3) * frame_size_x and (1 / 3) * frame_size_y < object_y < (2 / 3) * frame_size_y:
@@ -211,4 +210,4 @@ while True:
 
 cv2.destroyAllWindows()
 pygame.quit()
-sys.exit() 
+sys.exit()
