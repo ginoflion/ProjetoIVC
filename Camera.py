@@ -117,7 +117,6 @@ class Camera:
         if not self.cap.isOpened():
             self.cap.open(0)
         ret, image = self.cap.read()
-        self.image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
         cv2.namedWindow("Image")
         cv2.createTrackbar("H_min", "Image", self.h_min, 180, self.on_change_h_min)
