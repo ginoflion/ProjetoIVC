@@ -127,8 +127,6 @@ class Camera:
         cv2.createTrackbar("V_max", "Image", self.v_max, 255, self.on_change_v_max)
 
     def update_camera(self):
-        if not self.cap.isOpened():
-            self.cap.open(0)
         _, image = self.cap.read()
         image = image[:, ::-1, :]
         cv2.imshow("Image", image)
