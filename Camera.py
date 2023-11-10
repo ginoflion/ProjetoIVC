@@ -91,7 +91,7 @@ class Camera:
                 self.object_center_y = cy
 
     def get_object_position(self):
-        # Use the object's center coordinates obtained from segmentation
+
         return self.object_center_x, self.object_center_y
 
     def on_change_h_min(self, val):
