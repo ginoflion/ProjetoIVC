@@ -15,12 +15,7 @@ class YOLOIntegration:
 
         cv2.namedWindow("Image")
 
-    def start_camera(self, camera_index=0):
-        if not self.cap.isOpened():
-            self.cap.open(camera_index)
-    def close_camera(self):
-        self.cap.release()
-        cv2.destroyAllWindows()
+
 
     def process_frame(self, image):
         image = cv2.cvtColor(src=image, code=cv2.COLOR_BGR2RGB)
@@ -83,26 +78,18 @@ class YOLOIntegration:
     def get_object_position(self):
         return self.object_center_x, self.object_center_y
 
-    def run(self):
-        while True:
-            if not self.cap.isOpened():
-                self.cap.open(0)
 
-            _, image = self.cap.read()
-            image = cv2.flip(image, 1)
+    def open_camera(self):
+        self.cap = cv2.VideoCapture()
+        if not self.cap.isOpened():
+            self.cap.open(0)
+        ret, image = self.cap.read()
+    def update_camera(self):
+        _, image = self.cap.read()
+        image = image[:, ::-1, :]
+        cv2.imshow("Image", image)
+        self.process_frame(image)
 
-            processed_frame = self.process_frame(image)
-
-            cv2.imshow(winname="Image", mat=processed_frame)
-
-            c = cv2.waitKey(delay=1)
-            if c == 27:
-                break
-
-
-if __name__ == "__main__":
-    integration = YOLOIntegration()
-    integration.start_camera()
-    integration.run()
-    integration.close_camera()
-    cv2.destroyAllWindows()
+    def close_camera(self):
+        self.cap.release()
+        cv2.destroyAllWindows()

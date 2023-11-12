@@ -3,7 +3,7 @@ Snake Eater
 Made with PyGame
 """
 
-from Camera import *
+from Object import *
 import pygame, sys, time, random
 import cv2
 
@@ -89,14 +89,15 @@ def show_score(choice, color, font, size):
     game_window.blit(score_surface, score_rect)
     pygame.display.flip()
 
+
 # Camera
-camera = Camera()
-camera.open_camera()
+yolo_integration = YOLOIntegration()
+yolo_integration.open_camera()
 
 # Main logic
 waiting_for_keypress = True
 while waiting_for_keypress:
-    camera.update_camera()
+    yolo_integration.update_camera()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -106,8 +107,8 @@ while waiting_for_keypress:
 
 
 while True:
-    camera.update_camera()
-    object_x, object_y = camera.get_object_position()
+    yolo_integration.update_camera()
+    object_x, object_y = yolo_integration.get_object_position()
 
     # Moving the snake based on the object tracking position
     if object_x > (2 / 3) * frame_size_x and (1 / 3) * frame_size_y < object_y < (2 / 3) * frame_size_y:
