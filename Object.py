@@ -28,7 +28,6 @@ class YOLOIntegration:
                 cx = int((box[0] + box[2]) / 2)
                 cy = int((box[1] + box[3]) / 2)
 
-                # Draw rectangles based on phone's position
                 if cx > (2 / 3) * image_objects.shape[1] and (1 / 3) * image_objects.shape[0] < cy < (2 / 3) * \
                         image_objects.shape[0]:
                     cv2.rectangle(img=image_objects, pt1=(image_objects.shape[1] - 10, 0),
@@ -49,7 +48,7 @@ class YOLOIntegration:
                                   color=(255, 255, 255), thickness=6)
                 self.object_center_x = cx
                 self.object_center_y = cy
-                # Draw a red rectangle around the phone
+
                 cv2.rectangle(img=image_objects, pt1=(int(box[0]), int(box[1])), pt2=(int(box[2]), int(box[3])),
                               color=(255, 0, 0), thickness=2)
 
