@@ -5,15 +5,12 @@ import time
 import numpy as np
 
 class YOLOIntegration:
+
     def __init__(self):
         self.last_frame_timestamp = 0
-        self.cap = cv2.VideoCapture()
         self.model = YOLO("yolov8n.pt")
-        print("Known classes ({})".format(len(self.model.names)))
-        for i in range(len(self.model.names)):
-            print("{} : {}".format(i, self.model.names[i]))
-
         cv2.namedWindow("Image")
+
 
     def process_frame(self, image):
         image = cv2.cvtColor(src=image, code=cv2.COLOR_BGR2RGB)
@@ -27,7 +24,7 @@ class YOLOIntegration:
             pt2 = (int(box[2]), int(box[3]))
             confidence = box[4]
             class_id = int(box[5])
-            if class_id == 67 and confidence > 0.25:
+            if class_id == 67 and confidence > 0.20:
                 cx = int((box[0] + box[2]) / 2)
                 cy = int((box[1] + box[3]) / 2)
 
@@ -83,21 +80,22 @@ class YOLOIntegration:
         return self.object_center_x, self.object_center_y
 
 
+
     def open_camera(self):
         self.cap = cv2.VideoCapture()
         if not self.cap.isOpened():
             self.cap.open(0)
         ret, image = self.cap.read()
+
+
     def update_camera(self):
         _, image = self.cap.read()
         image = cv2.flip(image, 1)
-
         processed_frame = self.process_frame(image)
-
         cv2.imshow(winname="Image", mat=processed_frame)
 
 
-def close_camera(self):
+    def close_camera(self):
         self.cap.release()
         cv2.destroyAllWindows()
 
