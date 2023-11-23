@@ -1,16 +1,13 @@
 from ultralytics import YOLO
-import os.path
 import cv2
 import time
 import numpy as np
 
 class YOLOIntegration:
-
     def __init__(self):
         self.last_frame_timestamp = 0
         self.model = YOLO("yolov8n.pt")
         cv2.namedWindow("Image")
-
 
     def process_frame(self, image):
         image = cv2.cvtColor(src=image, code=cv2.COLOR_BGR2RGB)
@@ -73,12 +70,8 @@ class YOLOIntegration:
 
         return cv2.cvtColor(src=image_objects, code=cv2.COLOR_RGB2BGR)
 
-
-
     def get_object_position(self):
         return self.object_center_x, self.object_center_y
-
-
 
     def open_camera(self):
         self.cap = cv2.VideoCapture()
@@ -86,13 +79,11 @@ class YOLOIntegration:
             self.cap.open(0)
         ret, image = self.cap.read()
 
-
     def update_camera(self):
         _, image = self.cap.read()
         image = cv2.flip(image, 1)
         processed_frame = self.process_frame(image)
         cv2.imshow(winname="Image", mat=processed_frame)
-
 
     def close_camera(self):
         self.cap.release()

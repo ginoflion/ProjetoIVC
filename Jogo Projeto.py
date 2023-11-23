@@ -90,7 +90,7 @@ def show_score(choice, color, font, size):
     pygame.display.flip()
 
 
-# Camera
+# Yolo
 yolo_integration = YOLOIntegration()
 yolo_integration.open_camera()
 
